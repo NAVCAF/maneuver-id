@@ -8,3 +8,5 @@
 2. Statistical measures:
     2.1. Wilcoxon test
     2.2. Friedmann Tests
+
+3. Data Visualization
