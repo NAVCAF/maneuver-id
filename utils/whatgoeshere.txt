@@ -1,0 +1,4 @@
+1. Data loader
+2. Data Augmentation
+3. Train Loop
+4. Test / Val loop etc
