@@ -1,2 +1,2 @@
 1. a file for each model
-    Keep them separate to avoid merge conflicts later on
+Keep them separate to avoid merge conflicts later on
