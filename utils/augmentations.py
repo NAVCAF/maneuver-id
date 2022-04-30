@@ -2,31 +2,31 @@ import torch
 import math
 
 class GaussianNoise(object):
-  def __init__(self, factor = 1):
-    """
-    DESC
-    ---
-    Creates random gaussian noise that is added to 
-    the tensors based on the standard deviations of columns
-    scaled by a factor.
-    ---
-    INPUTS
-    ---
-    factor (float) : hyperparameter that scales the standard
-    deviation of the tensor's columns before constructing the
-    random gaussian noise tensor.
-    ---
-    RETURN
-    ---
-    torch.Tensor containing augmented data
-    """
-    self.factor = factor
+    def __init__(self, factor = 1):
+        """
+        DESC
+        ---
+        Creates random gaussian noise that is added to 
+        the tensors based on the standard deviations of columns
+        scaled by a factor.
+        ---
+        INPUTS
+        ---
+        factor (float) : hyperparameter that scales the standard
+        deviation of the tensor's columns before constructing the
+        random gaussian noise tensor.
+        ---
+        RETURN
+        ---
+        torch.Tensor containing augmented data
+        """
+        self.factor = factor
 
-  def __call__(self, data):
-    column_stddev = torch.std(data, dim = 0)
-    noise = torch.normal(0, self.factor, data.shape)
-    noise = noise * column_stddev 
-    return data + noise
+    def __call__(self, data):
+        column_stddev = torch.std(data, dim = 0)
+        noise = torch.normal(0, self.factor, data.shape)
+        noise = noise * column_stddev 
+        return data + noise
 
 class RotateColsRandomly(object):
 
