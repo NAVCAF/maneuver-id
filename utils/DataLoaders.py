@@ -4,6 +4,8 @@ import pandas as pd
 import os 
 from torch.nn.utils.rnn import pad_sequence
 from torch.utils.data import DataLoader, Dataset
+from .augmentations import RotateColsRandomly, GaussianNoise
+import torchvision
 
 class __FlightsDataset(Dataset):
 
@@ -38,11 +40,9 @@ class __FlightsDataset(Dataset):
                 path = os.path.join(root, folder_name, file_name)
                 X = pd.read_csv(path, sep = '\t', index_col=0)
 
-                # calculate the 3D distance vector
-                X['airspeed'] = ((X[' vx (m/s)']**2 + X[' vy (m/s)']**2 + X[' vz (m/s)']**2))**0.5
-
                 # drop two unecessary columns
                 X = X.drop(columns=['time (sec)'])
+                X = (X - X.mean()) / X.std()
                 X = X.to_numpy(dtype='float32')
 
                 # check for nan
@@ -56,6 +56,18 @@ class __FlightsDataset(Dataset):
         # to numpy
         self.X = np.array(self.X)
         self.Y = np.array(self.Y)
+
+        # rotate these columns
+        X_POS_COL, Y_POS_COL, X_VEL_COL, Y_VEL_COL = 0, 1, 3, 4
+        # add gaussian noice with each columns stdev
+        NOICE_FACTOR    = 0.05
+
+        # compose transformations
+        self.transforms = torchvision.transforms.Compose([
+            RotateColsRandomly(X_POS_COL, Y_POS_COL),
+            RotateColsRandomly(X_VEL_COL, Y_VEL_COL),
+            RotateColsRandomly(factor = NOICE_FACTOR),
+        ])
             
     def __len__(self):
         return len(self.X)
@@ -65,8 +77,13 @@ class __FlightsDataset(Dataset):
         X = self.X[idx]
         Y = self.Y[idx]
 
+        X = torch.tensor(X)
+        Y = torch.tensor(Y).long()
+
+        X = self.transforms(X)
+
         # cast to tensor and return
-        return torch.tensor(X), torch.tensor(Y).long()
+        return X, torch.tensor(Y).long()
     
     def collate_fn(batch):
         
