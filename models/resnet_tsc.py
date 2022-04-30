@@ -63,7 +63,7 @@ class ResNetTSC(nn.Module):
     ResNetTSC Model Instance
     """
 
-    def __init__(self, num_classes=2, in_channels=10):
+    def __init__(self, num_classes=2, in_channels=9):
         super(ResNetTSC, self).__init__()
 
         # Configurations of Stages 

@@ -45,7 +45,7 @@ class FCNBlock(nn.Module):
         return x
 
 class FullyConvNetwork(nn.Module):
-    def __init__(self, input_dims = 10, num_classes = 2):
+    def __init__(self, input_dims = 9, num_classes = 2):
 
         """
         DESC

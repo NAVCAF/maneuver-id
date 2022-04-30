@@ -66,7 +66,8 @@ class __FlightsDataset(Dataset):
         self.transforms = torchvision.transforms.Compose([
             RotateColsRandomly(X_POS_COL, Y_POS_COL),
             RotateColsRandomly(X_VEL_COL, Y_VEL_COL),
-            RotateColsRandomly(factor = NOICE_FACTOR),
+            GaussianNoise(factor = NOICE_FACTOR),
+            
         ])
             
     def __len__(self):
@@ -77,13 +78,13 @@ class __FlightsDataset(Dataset):
         X = self.X[idx]
         Y = self.Y[idx]
 
-        X = torch.tensor(X)
+        X = torch.from_numpy(X)
         Y = torch.tensor(Y).long()
 
         X = self.transforms(X)
 
         # cast to tensor and return
-        return X, torch.tensor(Y).long()
+        return X, Y
     
     def collate_fn(batch):
         
