@@ -56,7 +56,7 @@ class RotateColsRandomly(object):
     def __call__(self, x):
 
         # create an identity matrix of shape dim
-        dims = self.shape[2]
+        dims = x.shape[1]
         A = torch.eye(dims)
 
         # calculate random radians to rotate
