@@ -9,7 +9,7 @@ import torchvision
 
 class __FlightsDataset(Dataset):
 
-    def __init__(self, root):
+    def __init__(self, root, train=True):
         """
         DESC
         ---
@@ -30,6 +30,8 @@ class __FlightsDataset(Dataset):
 
         # declare arrays to append the data to
         self.X, self.Y = [], []
+        # set mode to train or val/test for data augmentation
+        self.train = train
 
         # iterate through the two folders
         for folder_name in self.folder_names:
@@ -80,8 +82,9 @@ class __FlightsDataset(Dataset):
 
         X = torch.from_numpy(X)
         Y = torch.tensor(Y).long()
-
-        X = self.transforms(X)
+        # augment data if training
+        if self.train:
+            X = self.transforms(X)
 
         # cast to tensor and return
         return X, Y
@@ -145,7 +148,10 @@ def DataLoaders(root, batch_size = 8):
     val_size = int(N * val_percentage)
     test_size = N - train_size - val_size
     train_data, val_data, test_data = torch.utils.data.random_split(dataset, [train_size, val_size, test_size], generator=torch.Generator().manual_seed(42))
-
+    # prevent augmentations in val and test data
+    val_data.train = False
+    test_data.train = False
+    # create data loaders
     train_loader = DataLoader(train_data, batch_size = batch_size, shuffle=True, collate_fn=__FlightsDataset.collate_fn)
     val_loader = DataLoader(val_data, batch_size = batch_size, shuffle=True, collate_fn=__FlightsDataset.collate_fn)
     test_loader = DataLoader(test_data, batch_size = batch_size, shuffle=True, collate_fn=__FlightsDataset.collate_fn,)
