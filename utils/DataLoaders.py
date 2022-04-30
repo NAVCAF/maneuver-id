@@ -154,7 +154,7 @@ def DataLoaders(root, batch_size = 8):
     # create data loaders
     train_loader = DataLoader(train_data, batch_size = batch_size, shuffle=True, collate_fn=__FlightsDataset.collate_fn)
     val_loader = DataLoader(val_data, batch_size = batch_size, shuffle=True, collate_fn=__FlightsDataset.collate_fn)
-    test_loader = DataLoader(test_data, batch_size = batch_size, shuffle=True, collate_fn=__FlightsDataset.collate_fn,)
+    test_loader = DataLoader(test_data, batch_size = batch_size, shuffle=False, collate_fn=__FlightsDataset.collate_fn,)
     
     print("Batch size: ", batch_size)
     print("Train dataset samples = {}, batches = {}".format(train_data.__len__(), len(train_loader)))
