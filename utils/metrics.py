@@ -27,7 +27,7 @@ def get_predictions(model, test_loader):
     for x, y, lx in test_loader:
         model.eval()
         pred = model(x.cuda())
-        prob = torch.nn.functional.softmax(pred)
+        prob = torch.nn.functional.softmax(pred, dim=1)
         pred = torch.argmax(prob, dim=1)
         y_pred_prob.extend(prob.cpu().detach().numpy()[:,1])
         y_pred.extend(list(pred.cpu().detach().numpy()))
