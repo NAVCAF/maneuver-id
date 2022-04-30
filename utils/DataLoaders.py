@@ -42,6 +42,7 @@ class __FlightsDataset(Dataset):
 
                 # drop two unecessary columns
                 X = X.drop(columns=['time (sec)'])
+                X = (X - X.mean()) / X.std()
                 X = X.to_numpy(dtype='float32')
 
                 # check for nan
