@@ -1,5 +1,12 @@
 from torch import nn 
 
+"""
+FCN implemented from this paper 
+
+https://arxiv.org/pdf/1804.09530.pdf
+
+"""
+
 class FCNBlock(nn.Module):
     
     # A single block used in the FCN network
