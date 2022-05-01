@@ -1,4 +1,3 @@
-from turtle import forward
 import torch
 from torch import nn
 
@@ -41,7 +40,7 @@ class bcnn_block(nn.Module):
         self.conv = nn.Conv1d(in_channels=in_channels, out_channels=out_channels, kernel_size=kernel_size)
         self.relu = nn.ReLU()
         self.Dropout = nn.Dropout(p)
-        self.pool = nn.MaxPool1d(2)
+        self.pool = nn.MaxPool1d(3)
     
     def forward(self, x, final = False):
         out = self.conv(x)
@@ -66,12 +65,13 @@ class Bayes_CNN(nn.Module):
     dropout_probs: lits of dropout rates
 
     '''
-    def __init__(self, in_channels, out_channel_list, dropout_probs, kernel_sizes):
+    def __init__(self, in_channels = 9, out_channel_list = [128, 256, 256, 128], 
+                 p = 0.5, kernel_sizes = [7,5,3,2]):
         super().__init__()
         in_channel_list = [in_channels] + out_channel_list[:-1]
         self.blocks = nn.ModuleList([
-            bcnn_block(in_channel_list[i], out_channel_list[i], kernel_sizes[i], dropout_probs[i])
-            for i in len(out_channel_list)
+            bcnn_block(in_channel_list[i], out_channel_list[i], kernel_sizes[i], p)
+            for i in range(len(out_channel_list))
         ])
         self.final_pool = nn.AdaptiveMaxPool1d(1)
 
@@ -79,7 +79,7 @@ class Bayes_CNN(nn.Module):
     
     def forward(self, x):
 
-        out = x
+        out = torch.permute(x, (0,2,1))
         num_blocks = len(self.blocks)
         for i,module in enumerate(self.blocks):
             if i < num_blocks-1:
