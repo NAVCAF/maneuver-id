@@ -7,18 +7,19 @@ This repository contains the code used to classify U.S. Air Force flight simulat
 The project is divided into three directories: analysis, models and utils.
 
     ./
-    ├── /models                 # deep learning models implemented
-    │   ├── /FCN.py                 # Fully Convolutional Network
-    │   ├── /BCNN.py                # Bayes Convolutional Network
-    │   └── /ResNet.py              # Time Series ResNet
-    ├── /analysis               # functions that perform statistical tests and performance measures
-    │   ├── /statistics.py          # functions for significance testing
-    │   └── /metrics.py             # functions to calculate performance measures
-    └── /utils                  # augmentations, dataloaders, and functions used for training
-    │   ├── /augmentations.py       # custom augmentations used for training
-    │   ├── /DataLoaders.py         # reads data and delivers dataloaders with a consistent, predetermined split
-    │   └── /train_val_funcs.py     # utils for training, validating, and testing
-    └── baseline.ipynb         # Implementation of original baseline
+    ├── /models                     # deep learning models implemented
+    │   ├── /FCN.py                     # Fully Convolutional Network
+    │   ├── /BCNN.py                    # Bayes Convolutional Network
+    │   └── /ResNet.py                  # Time Series ResNet
+    ├── /analysis                   # functions that perform statistical tests and performance measures
+    |   ├── /data_visualization.ipynb   # notebook to visualize data
+    │   ├── /statistics.py              # functions for significance testing
+    │   └── /metrics.py                 # functions to calculate performance measures
+    └── /utils                      # augmentations, dataloaders, and functions used for training
+    │   ├── /augmentations.py           # custom augmentations used for training
+    │   ├── /DataLoaders.py             # reads data and delivers dataloaders with a consistent, predetermined split
+    │   └── /train_val_funcs.py         # utils for training, validating, and testing
+    └── baseline.ipynb             # Implementation of original baseline
 
 ## Models
 
