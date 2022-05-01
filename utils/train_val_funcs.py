@@ -74,7 +74,7 @@ def val(model, val_loader, criterion, device):
     val_loss: average loss over the epoch
     val_acc: average accuracy over the epoch
     """
-    model.train()
+    model.eval()
     # track loss and accuracy over the epoch
     batch_bar = tqdm(total=len(val_loader), dynamic_ncols=True, leave=False, position=0, desc='Val/Test') 
     total_loss = 0
