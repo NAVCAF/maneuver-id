@@ -2,6 +2,8 @@ from sklearn.metrics import classification_report, confusion_matrix, roc_auc_sco
 import torch 
 import matplotlib.pyplot as plt
 import seaborn as sns
+import collections
+import numpy as np
 
 def get_predictions(model, test_loader):
     """
@@ -34,6 +36,43 @@ def get_predictions(model, test_loader):
         y_true.extend(list(y.cpu().detach().numpy()))    
 
     return y_true, y_pred, y_pred_prob
+
+def get_majority_vote(model, data_loader, num_iters=100):
+    """
+    DESC
+    ---
+    Calculates predictions of BCNN using a majority vote due to 
+    its stochastic nature during inference
+    ---
+    INPUTS
+    ---
+    model - Model used for evaluation
+    data_loader - Dataloader for test data
+    num_iters = Number of iterations for inference
+    ---
+    RETURN
+    ---
+    y_pred_final - majority vote predictions
+    """
+    y_pred_super = []
+
+    for i in range(0, num_iters):
+      y_true, y_pred, y_pred_prob = get_predictions(model, data_loader)
+      y_pred_super.append(y_pred)
+
+    y_pred_super = np.array(y_pred_super)
+
+    y_pred_final = []
+
+    for col in range(y_pred_super.shape[1]):
+      col_counts = collections.Counter(y_pred_super[:, col])
+      if col_counts[0] > col_counts[1]:
+        y_pred_final.append(0)
+      elif col_counts[1] > col_counts[0]:
+        y_pred_final.append(1)
+      else:
+        y_pred_final.append(np.random.choice([0,1]))
+    return y_pred_final
 
 def plot_confusion_matrix(y_pred, y_true):
     """
