@@ -2,7 +2,7 @@ import json
 from scipy.stats import wilcoxon
 from scipy.stats import friedmanchisquare as friedman
 
-def report_wilcoxon(baseline: list, scores: list, names: list)->tuple:
+def report_wilcoxon(baseline: list, models: list, names: list)->tuple:
     '''
     DESC
     ---
@@ -25,18 +25,18 @@ def report_wilcoxon(baseline: list, scores: list, names: list)->tuple:
 
     '''
     baseline_stats = {}
-    for name, score in zip(names, scores):
-        baseline_stats[name] = wilcoxon(score, baseline)
+    for name, model in zip(names, models):
+        baseline_stats[name] = wilcoxon(model, baseline)
     
     cross_stats = {name:{} for name in names}
-    for name_1, score_1 in zip(names, scores):
-        for name_2, score_2 in zip(names, scores):
+    for name_1, model_1 in zip(names, models):
+        for name_2, model_2 in zip(names, models):
             if name_1 != name_2:
-                cross_stats[name_1][name_2] = wilcoxon(score_1, score_2)
+                cross_stats[name_1][name_2] = wilcoxon(model_1, model_2)
     
     return baseline_stats, cross_stats
 
-def report_friedman(baseline, scores):
+def report_friedman(baseline, models):
     '''
     DESC
     ---
@@ -54,11 +54,11 @@ def report_friedman(baseline, scores):
     freidmann stats: scipy.stats object with stat and p value
 
     '''
-    all_scores = [baseline] + scores
-    return friedman(*all_scores)
+    all_models = [baseline] + models
+    return friedman(*all_models)
 
 
-def get_statistics(metric: str, baseline: list, scores: list, names: list, file_path = None):
+def get_statistics(baseline: list, models: list, names: list, file_path = None):
     '''
     DESC
     ---
@@ -78,8 +78,8 @@ def get_statistics(metric: str, baseline: list, scores: list, names: list, file_
     stat: dictionary with all statistical test stats
 
     '''
-    baseline_wilcoxon_stats, cross_wilcoxon_stats = report_wilcoxon(baseline, scores, names)
-    friedman_stats = report_friedman(baseline,scores)
+    baseline_wilcoxon_stats, cross_wilcoxon_stats = report_wilcoxon(baseline, models, names)
+    friedman_stats = report_friedman(baseline,models)
     stat = {}
     stat["wilcoxon_baseline"] = baseline_wilcoxon_stats
     stat["wilcoxon_cross"] = cross_wilcoxon_stats
